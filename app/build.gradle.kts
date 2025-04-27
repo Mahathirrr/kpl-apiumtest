@@ -12,7 +12,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,26 +24,40 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    sourceSets {
+        getByName("main") {
+            resources.srcDir("src/main/resources")
+        }
+        getByName("test") {
+            java.srcDir("src/test/java")
+            resources.srcDir("src/test/resources")
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            it.useTestNG()
+        }
     }
 }
 
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.appium.java.client)
-    implementation(libs.selenium.java)
-    implementation(libs.testng)
+
+    // Pindahkan Appium dan Selenium ke testImplementation
+    testImplementation(libs.appium.java.client)
+    testImplementation(libs.selenium.java)
+    testImplementation(libs.testng)
 
     // Dependency bawaan Android
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-}
-
-// Tambahan konfigurasi untuk TestNG jika diperlukan
-tasks.withType<Test> {
-    useTestNG()
 }
